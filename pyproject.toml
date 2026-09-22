@@ -27,6 +27,7 @@ dev = [
     "ruff",
     "mypy",
     "pre-commit",
+    "pandas-stubs",
 ]
 
 [tool.setuptools.packages.find]
