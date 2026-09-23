@@ -22,8 +22,7 @@ def test_clasificar_grupo_etario_edad_negativa_lanza_error():
 @pytest.mark.parametrize(
     "edad_anios, grupo_esperado",
     [
-        # Ejemplo ya llenado: el límite inferior absoluto (recién nacido).
-        pytest.param(0, "pediátrico", id="0 anios, recién nacido"),
+        pytest.param(0, "pediátrico", id="0 anios, recien nacido"),
         pytest.param(1, "pediátrico", id="1 anio, lactante"),
         pytest.param(17, "pediátrico", id="17 anios, adolescente"),
         pytest.param(18, "adulto", id="18 anios, adulto"),
