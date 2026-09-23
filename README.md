@@ -134,8 +134,26 @@ duplicado, visita antes del nacimiento y valores centinela).
 Este laboratorio se trabajó con apoyo de Claude Code en modo tutor; las
 instrucciones de uso están en [`CLAUDE.md`](CLAUDE.md).
 
+## Notebook
+
 <!--
-  PENDIENTE (paso 2 del enunciado): cuando reescribas el notebook para que
-  importe de clinlab, agrega aquí una sección "Notebook" con la ruta
-  (notebooks/analisis_pacientes.ipynb) y cómo abrirlo.
+  Paso 2 del enunciado: el análisis del lab 2 reescrito para que la lógica
+  venga de clinlab. Se versiona CON salidas porque los CSV no están en el
+  repo: así se puede leer el resultado sin tener los datos.
 -->
+[`notebooks/analisis_pacientes.ipynb`](notebooks/analisis_pacientes.ipynb)
+reescribe el análisis del laboratorio 2: carga los datos, llama a las
+funciones de `clinlab` y explica los resultados. Se puede leer directamente en
+GitHub, porque está guardado con sus salidas.
+
+Para ejecutarlo se necesitan los CSV de Synthea (`patients.csv`,
+`encounters.csv`, `observations.csv`), que no están en el repo por su tamaño:
+
+```bash
+# Con el entorno virtual activado:
+pip install -e ".[dev,notebook]"   # agrega JupyterLab
+jupyter lab                        # y abrir notebooks/analisis_pacientes.ipynb
+```
+
+La ruta a los CSV se configura en una sola línea (`RUTA_DATOS`, sección 0 del
+notebook); por defecto apunta a `../../data`, relativa a `notebooks/`.
