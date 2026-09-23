@@ -4,14 +4,13 @@
   sección. Bórralos cuando el README quede como lo quieres entregar.
 -->
 
-<!--
-  BADGE DEL CI (paso 10): cuando exista el workflow de GitHub Actions, va aquí
-  arriba, bajo el título, para que lo primero que se vea sea "CI en verde".
-  Ejemplo (el nombre del .yml depende de cómo lo llames):
-  ![CI](https://github.com/JorgeHRE/s05-buenas-practicas-pytest/actions/workflows/ci.yml/badge.svg)
--->
-
 # clinlab
+
+<!--
+  BADGE DEL CI (paso 10): lo primero que se ve es si la suite está en verde.
+  Lo genera GitHub Actions a partir de .github/workflows/ci.yml.
+-->
+[![CI](https://github.com/JorgeHRE/s05-buenas-practicas-pytest/actions/workflows/ci.yml/badge.svg)](https://github.com/JorgeHRE/s05-buenas-practicas-pytest/actions/workflows/ci.yml)
 
 <!--
   QUÉ ES, en una o dos frases. Quien llega al repo (incluido tu profesor)
