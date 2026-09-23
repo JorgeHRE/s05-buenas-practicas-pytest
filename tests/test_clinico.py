@@ -26,3 +26,31 @@ def test_calcular_egfr_ckd_epi_contra_referencia_kidney_org(
     result = calcular_egfr_ckd_epi(creatinina_mg_dl, edad_anios, sexo)
     assert result == pytest.approx(egfr_esperado, rel=0.01, abs=0.5)  # tolerancia relativa del 1%
 
+
+
+# Hueco detectado por cobertura (paso 8): clinico.py líneas 43, 45 y 56
+# (las validaciones de entrada) nunca se ejecutaban; la tabla de kidney.org
+# solo usa entradas válidas. Sin la validación de edad, una edad negativa
+# daría un eGFR "normal" en silencio en vez de tronar.
+# Cada caso tiene UNA sola entrada inválida y las demás válidas, para saber
+# qué validación se está probando.
+@pytest.mark.parametrize(
+    "creatinina_mg_dl, edad_anios, sexo",
+    [
+        
+        pytest.param(0.0, 50, "F", id="creatinina cero"),
+        pytest.param(-1.0, 50, "F", id="creatinina negativa"),
+        
+        pytest.param(1, -5, "M", id="edad negativa"),
+        pytest.param(1, 30, "f", id="sexo invalido")
+    ],
+)
+def test_calcular_egfr_ckd_epi_entrada_invalida_lanza_error(
+    creatinina_mg_dl, edad_anios, sexo
+):
+    # Sin match: basta con que se lance ValueError. Como cada caso tiene
+    # una sola entrada mala, el error solo puede venir de esa validación
+    # (salvo que otra validación también estuviera mal escrita).
+    with pytest.raises(ValueError):
+        calcular_egfr_ckd_epi(creatinina_mg_dl, edad_anios, sexo)
+
