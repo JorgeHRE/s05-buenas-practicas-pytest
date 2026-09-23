@@ -29,6 +29,14 @@ dev = [
     "pre-commit",
     "pandas-stubs",
 ]
+# [notebook]: solo para abrir y ejecutar notebooks/analisis_pacientes.ipynb.
+# Va aparte de [dev] para que los tests (y el CI) no instalen Jupyter.
+# jupyterlab incluye ipykernel, así que sirve tanto para `jupyter lab` como
+# para VS Code (eligiendo el kernel del .venv).
+# Instalar con: pip install -e ".[dev,notebook]"
+notebook = [
+    "jupyterlab",
+]
 
 [tool.setuptools.packages.find]
 # Le dice a setuptools que el código fuente vive bajo src/, no en la raíz.
