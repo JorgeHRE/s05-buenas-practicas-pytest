@@ -40,6 +40,11 @@ where = ["src"]
 [tool.pytest.ini_options]
 # Le dice a pytest dónde buscar los tests (conftest.py y test_*.py van en tests/).
 testpaths = ["tests"]
+# Opciones que se agregan solas cada vez que corres `pytest` (paso 8 del lab):
+#   --cov=clinlab               mide la cobertura del paquete clinlab (no de los tests)
+#   --cov-report=term-missing   muestra en la terminal el % y las líneas NO cubiertas
+#   --cov-fail-under=80         la corrida falla si la cobertura total baja de 80 %
+addopts = "--cov=clinlab --cov-report=term-missing --cov-fail-under=80"
 
 [tool.mypy]
 # Carpeta que mypy debe revisar cuando corras `mypy src/` (paso 3 del lab).
