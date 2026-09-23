@@ -45,3 +45,41 @@ def test_detectar_fechas_imposibles_visita_antes_de_nacer(df_pacientes_malicioso
         resultado,
         pd.Series([False, False, False, False, True, False, False, False], name=None),
     ) 
+
+
+# Hallazgo lab 2: valores centinela (edad 180 en p6, HbA1c 0 en p7) que se
+# hacen pasar por datos reales. Se detectan porque caen fuera del rango
+# fisiológicamente posible, que elegimos nosotros al llamar a la función.
+@pytest.mark.parametrize(
+    # Los 4 parámetros que cambian entre casos; el resto del test es igual.
+    "columna, minimo, maximo, esperado",
+    [
+        # Edad 0-120 años: 0 deja pasar recién nacidos; 120 queda cerca del
+        # máximo humano verificado (122) y deja fuera el centinela 180 (p6).
+        pytest.param(
+            "edad_anios", 0, 120, [False, False, False, False, False, True, False, False], id="edad, centinela 180"
+        ),
+        # HbA1c 3-20 %: 0 % es fisiológicamente imposible (centinela en p7).
+
+        pytest.param("hba1c", 3, 20, [False, False, False, False, False, False, True, False], id="hba1c, centinela 0"),
+    ],
+)
+def test_marcar_valores_implausibles_centinelas(
+    df_pacientes_malicioso, columna, minimo, maximo, esperado
+):
+    # La fixture y los parámetros llegan juntos: pytest resuelve la fixture
+    # por su nombre y los otros 4 argumentos salen de cada pytest.param.
+
+    # ACT: auditamos solo la columna de este caso.
+    resultado = marcar_valores_implausibles(
+        df_pacientes_malicioso[columna], minimo=minimo, maximo=maximo
+    )
+
+    # ASSERT: las 8 filas, para atrapar falsos negativos Y falsos positivos.
+    # name=columna: aquí las dos comparaciones internas (< minimo, > maximo)
+    # usan la MISMA Series, así que el resultado sí conserva su nombre
+    # (al revés que en el test de fechas, donde eran dos Series distintas).
+    pd.testing.assert_series_equal(
+        resultado,
+        pd.Series(esperado, name=columna),
+    )
