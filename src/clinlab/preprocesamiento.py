@@ -17,8 +17,9 @@ def optimizar_dtypes(
         Nombres de columnas a convertir a dtype 'category'
         (valores repetitivos de un conjunto cerrado, ej. GENDER, RACE).
     columnas_fecha : list[str]
-        Nombres de columnas a convertir a datetime64[ns]
-        (ej. BIRTHDATE, START).
+        Nombres de columnas a convertir a datetime64 con pd.to_datetime
+        (ej. BIRTHDATE, START). La resolución (ns, us, ...) la decide la
+        versión de pandas: pandas 3 usa microsegundos al leer texto.
 
     Returns
     -------
