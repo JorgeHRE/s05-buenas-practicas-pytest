@@ -53,4 +53,4 @@ def unir_con_validacion(
         how=how,
         validate=validate,
     )
-    return merge_result 
+    return merge_result

@@ -20,12 +20,13 @@ def test_calcular_egfr_ckd_epi_contra_referencia_kidney_org(
     creatinina_mg_dl, edad_anios, sexo, egfr_esperado
 ):
     """
-    Test for calculating eGFR using the CKD-EPI equation against reference values from kidney.org.  
+    Test for calculating eGFR using the CKD-EPI equation against reference values from kidney.org.
     (https://www.kidney.org/professionals/gfr_calculator + CKD-EPI Creatinine (2021), Standardized Assays: Yes, Adjust for BSA: No).
     """
     result = calcular_egfr_ckd_epi(creatinina_mg_dl, edad_anios, sexo)
-    assert result == pytest.approx(egfr_esperado, rel=0.01, abs=0.5)  # tolerancia relativa del 1%
-
+    assert result == pytest.approx(
+        egfr_esperado, rel=0.01, abs=0.5
+    )  # tolerancia relativa del 1%
 
 
 # Hueco detectado por cobertura (paso 8): clinico.py líneas 43, 45 y 56
@@ -37,12 +38,10 @@ def test_calcular_egfr_ckd_epi_contra_referencia_kidney_org(
 @pytest.mark.parametrize(
     "creatinina_mg_dl, edad_anios, sexo",
     [
-        
         pytest.param(0.0, 50, "F", id="creatinina cero"),
         pytest.param(-1.0, 50, "F", id="creatinina negativa"),
-        
         pytest.param(1, -5, "M", id="edad negativa"),
-        pytest.param(1, 30, "f", id="sexo invalido")
+        pytest.param(1, 30, "f", id="sexo invalido"),
     ],
 )
 def test_calcular_egfr_ckd_epi_entrada_invalida_lanza_error(
@@ -53,4 +52,3 @@ def test_calcular_egfr_ckd_epi_entrada_invalida_lanza_error(
     # (salvo que otra validación también estuviera mal escrita).
     with pytest.raises(ValueError):
         calcular_egfr_ckd_epi(creatinina_mg_dl, edad_anios, sexo)
-

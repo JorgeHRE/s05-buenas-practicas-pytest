@@ -6,14 +6,13 @@ from clinlab.clasificacion import clasificar_grupo_etario
 def test_clasificar_grupo_etario_caso_normal():
     definir_edad = 18
     resultado = clasificar_grupo_etario(definir_edad)
-    assert resultado == "adulto" 
+    assert resultado == "adulto"
 
 
 def test_clasificar_grupo_etario_edad_negativa_lanza_error():
     definir_edad = -5
     with pytest.raises(ValueError):
-        clasificar_grupo_etario(definir_edad)  
-
+        clasificar_grupo_etario(definir_edad)
 
 
 # Hueco detectado por cobertura (paso 8): clasificacion.py líneas 24 y 28
@@ -32,7 +31,6 @@ def test_clasificar_grupo_etario_edad_negativa_lanza_error():
         pytest.param(64, "adulto", id="64 anios, adulto"),
         pytest.param(65, "adulto mayor", id="65 anios, adulto mayor"),
         pytest.param(66, "adulto mayor", id="66 anios, adulto mayor"),
-
     ],
 )
 def test_clasificar_grupo_etario_limites(edad_anios, grupo_esperado):

@@ -14,13 +14,13 @@ def test_marcar_valores_implausibles_caso_normal():
     serie = pd.Series([10, 20, 30, 40, 50])
     resultado = marcar_valores_implausibles(serie, minimo=15, maximo=45)
     esperado = pd.Series([True, False, False, False, True])
-    pd.testing.assert_series_equal(resultado, esperado) 
+    pd.testing.assert_series_equal(resultado, esperado)
 
 
 def test_marcar_valores_implausibles_rango_invertido_lanza_error():
     serie = pd.Series([10, 20, 30])
     with pytest.raises(ValueError):
-        marcar_valores_implausibles(serie, minimo=30, maximo=20)      
+        marcar_valores_implausibles(serie, minimo=30, maximo=20)
 
 
 def test_detectar_fechas_imposibles_visita_antes_de_nacer(df_pacientes_malicioso):
@@ -49,7 +49,7 @@ def test_detectar_fechas_imposibles_visita_antes_de_nacer(df_pacientes_malicioso
     pd.testing.assert_series_equal(
         resultado,
         pd.Series([False, False, False, False, True, False, False, False], name=None),
-    ) 
+    )
 
 
 # Hallazgo lab 2: valores centinela (edad 180 en p6, HbA1c 0 en p7) que se
@@ -62,11 +62,20 @@ def test_detectar_fechas_imposibles_visita_antes_de_nacer(df_pacientes_malicioso
         # Edad 0-120 años: 0 deja pasar recién nacidos; 120 queda cerca del
         # máximo humano verificado (122) y deja fuera el centinela 180 (p6).
         pytest.param(
-            "edad_anios", 0, 120, [False, False, False, False, False, True, False, False], id="edad, centinela 180"
+            "edad_anios",
+            0,
+            120,
+            [False, False, False, False, False, True, False, False],
+            id="edad, centinela 180",
         ),
         # HbA1c 3-20 %: 0 % es fisiológicamente imposible (centinela en p7).
-
-        pytest.param("hba1c", 3, 20, [False, False, False, False, False, False, True, False], id="hba1c, centinela 0"),
+        pytest.param(
+            "hba1c",
+            3,
+            20,
+            [False, False, False, False, False, False, True, False],
+            id="hba1c, centinela 0",
+        ),
     ],
 )
 def test_marcar_valores_implausibles_centinelas(
@@ -100,7 +109,6 @@ def test_marcar_valores_implausibles_centinelas(
         # Tres apariciones del mismo id: 2 copias sobrantes. Es el caso que
         # distingue las dos definiciones (keep=False daría 3).
         pytest.param(pd.Series(["p1", "p1", "p1"]), 2, id="p1 tres veces"),
-        
         pytest.param(pd.Series(["p1", "p2", "p3"]), 0, id="sin duplicados"),
         # dtype=str evita el aviso de pandas por Series vacía sin tipo.
         pytest.param(pd.Series([], dtype=str), 0, id="serie vacia"),

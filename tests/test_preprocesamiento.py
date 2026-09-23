@@ -5,11 +5,13 @@ from clinlab.preprocesamiento import optimizar_dtypes
 
 
 def test_optimizar_dtypes_dataframe_vacio():
-    # Hallazgo lab 2: El dataframe de entrada está vacío, pero aún así se deben convertir los dtypes de las columnas especificadas. 
-    df_vacio = pd.DataFrame({
-        "GENDER": [],
-        "BIRTHDATE": [],
-    })
+    # Hallazgo lab 2: El dataframe de entrada está vacío, pero aún así se deben convertir los dtypes de las columnas especificadas.
+    df_vacio = pd.DataFrame(
+        {
+            "GENDER": [],
+            "BIRTHDATE": [],
+        }
+    )
 
     resultado = optimizar_dtypes(
         df_vacio,
@@ -20,7 +22,6 @@ def test_optimizar_dtypes_dataframe_vacio():
     assert list(resultado.columns) == ["GENDER", "BIRTHDATE"]
     assert isinstance(resultado["GENDER"].dtype, pd.CategoricalDtype)
     assert pd.api.types.is_datetime64_any_dtype(resultado["BIRTHDATE"])
-    
 
 
 def test_optimizar_dtypes_columna_entera_nan():
@@ -29,10 +30,12 @@ def test_optimizar_dtypes_columna_entera_nan():
 
     # ARRANGE: 3 filas (no 0) para cubrir un caso distinto al test anterior:
     # hay filas, pero ningún valor real en ellas.
-    df_nan = pd.DataFrame({
-        "GENDER": [np.nan, np.nan, np.nan],     # categórica sin ningún valor
-        "BIRTHDATE": [np.nan, np.nan, np.nan],  # fecha sin ningún valor
-    })
+    df_nan = pd.DataFrame(
+        {
+            "GENDER": [np.nan, np.nan, np.nan],  # categórica sin ningún valor
+            "BIRTHDATE": [np.nan, np.nan, np.nan],  # fecha sin ningún valor
+        }
+    )
 
     # ACT: llamamos a la función igual que en producción.
     resultado = optimizar_dtypes(

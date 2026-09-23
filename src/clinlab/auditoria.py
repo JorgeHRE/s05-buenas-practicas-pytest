@@ -45,6 +45,7 @@ def contar_duplicados(identificadores: pd.Series) -> int:
     """
     return int(identificadores.duplicated().sum())
 
+
 def marcar_valores_implausibles(
     valores: pd.Series,
     minimo: float,
@@ -79,5 +80,3 @@ def marcar_valores_implausibles(
         )
     mascara_implausibles = (valores < minimo) | (valores > maximo)
     return mascara_implausibles
-
-

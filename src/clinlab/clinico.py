@@ -61,7 +61,7 @@ def calcular_egfr_ckd_epi(
     egfr = (
         142
         * (min_ratio**alpha)
-        * (max_ratio**(-1.200))
+        * (max_ratio ** (-1.200))
         * (0.9938**edad_anios)
         * factor_sexo
     )
