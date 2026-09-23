@@ -1,7 +1,12 @@
+import numpy as np
 import pandas as pd
 import pytest
 
-from clinlab.auditoria import detectar_fechas_imposibles, marcar_valores_implausibles
+from clinlab.auditoria import (
+    contar_duplicados,
+    detectar_fechas_imposibles,
+    marcar_valores_implausibles,
+)
 from clinlab.preprocesamiento import optimizar_dtypes
 
 
@@ -83,3 +88,32 @@ def test_marcar_valores_implausibles_centinelas(
         resultado,
         pd.Series(esperado, name=columna),
     )
+
+
+# Hueco detectado por cobertura (paso 8): auditoria.py línea 46
+# (contar_duplicados) no tenía ningún test. El test fija el CONTRATO del
+# docstring: se cuentan las copias sobrantes (criterio de .duplicated(),
+# la primera aparición no cuenta), no todas las filas involucradas.
+@pytest.mark.parametrize(
+    "identificadores, duplicados_esperados",
+    [
+        # Tres apariciones del mismo id: 2 copias sobrantes. Es el caso que
+        # distingue las dos definiciones (keep=False daría 3).
+        pytest.param(pd.Series(["p1", "p1", "p1"]), 2, id="p1 tres veces"),
+        
+        pytest.param(pd.Series(["p1", "p2", "p3"]), 0, id="sin duplicados"),
+        # dtype=str evita el aviso de pandas por Series vacía sin tipo.
+        pytest.param(pd.Series([], dtype=str), 0, id="serie vacia"),
+        # Decisión consciente: dos person_id faltantes repetidos SÍ cuentan
+        # como duplicado (comportamiento actual de .duplicated()). Si algún
+        # día se cambia, este caso obliga a hacerlo a propósito.
+        pytest.param(pd.Series([np.nan, np.nan, "p1"]), 1, id="NaN repetido"),
+    ],
+)
+def test_contar_duplicados(identificadores, duplicados_esperados):
+    # ACT
+    resultado = contar_duplicados(identificadores)
+
+    # ASSERT: comparamos enteros exactos con ==. Aquí no hace falta
+    # pytest.approx porque no son flotantes.
+    assert resultado == duplicados_esperados
