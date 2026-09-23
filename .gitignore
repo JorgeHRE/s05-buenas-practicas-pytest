@@ -21,3 +21,6 @@ htmlcov/
 # Datos: el enunciado pide explícitamente no subir los CSV de Synthea.
 # La fixture maliciosa (tests/conftest.py) reemplaza esta necesidad.
 *.csv
+
+# Base de ejemplos que Hypothesis guarda entre corridas (local, no se versiona).
+.hypothesis/

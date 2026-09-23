@@ -1,5 +1,18 @@
 from typing import Literal
 
+# Límite superior fisiológico para validación de edad.
+# Récord humano verificado: Jeanne Calment (122 años y 164 días, Guinness World Records).
+# Se fija en 130 años para admitir fracciones de año y posibles futuros récords,
+# previniendo el underflow numérico (0.9938 ** edad -> 0.0) descubierto por Hypothesis.
+EDAD_MAXIMA_ANIOS: float = 130.0
+
+
+# Limite superior fisiológico para validación de creatinina sérica.
+# Récord humano verificado: 73.8 mg/dL (Persaud C, et al. Highest Recorded Serum Creatinine. Case Rep Nephrol. 2021;2021:6048919. doi: 10.1155/2021/6048919)
+# Se fija en 100 mg/dL para admitir posibles futuros récords, previniendo el underflow numérico (max(Scr/κ, 1) ** -1.2) descubierto por Hypothesis.
+# El notebook (sección 6) usa 73.8 para marcar valores clínicamente inverosímiles; aquí el límite es más amplio porque solo rechaza entradas imposibles de procesar.
+CREATININA_MAXIMA_MG_DL: float = 100
+
 
 def calcular_egfr_ckd_epi(
     creatinina_mg_dl: float,
@@ -38,11 +51,24 @@ def calcular_egfr_ckd_epi(
     ------
     ValueError
         Si creatinina_mg_dl <= 0 o edad_anios < 0.
+    ValueError
+        Si edad_anios > EDAD_MAXIMA_ANIOS.
+    ValueError
+        Si creatinina_mg_dl > CREATININA_MAXIMA_MG_DL.
     """
     if creatinina_mg_dl <= 0:
         raise ValueError("creatinina_mg_dl debe ser > 0")
+    if creatinina_mg_dl > CREATININA_MAXIMA_MG_DL:
+        raise ValueError(
+            f"creatinina_mg_dl supera el límite máximo permitido: {CREATININA_MAXIMA_MG_DL} mg/dL"
+        )
+
     if edad_anios < 0:
         raise ValueError("edad_anios debe ser >= 0")
+    if edad_anios > EDAD_MAXIMA_ANIOS:
+        raise ValueError(
+            f"edad_anios supera el límite máximo permitido: {EDAD_MAXIMA_ANIOS} años"
+        )
 
     if sexo == "F":
         kappa = 0.7

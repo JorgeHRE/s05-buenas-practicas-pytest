@@ -40,7 +40,16 @@ def test_calcular_egfr_ckd_epi_contra_referencia_kidney_org(
     [
         pytest.param(0.0, 50, "F", id="creatinina cero"),
         pytest.param(-1.0, 50, "F", id="creatinina negativa"),
+        # Valor implausible: la creatinina más alta reportada en la literatura
+        # es 73.8 mg/dL (Persaud C, et al. Highest Recorded Serum Creatinine.
+        # Case Rep Nephrol. 2021;2021:6048919. doi: 10.1155/2021/6048919).
+        # Se fija en 100 mg/dL para admitir posibles futuros récords,
+        # previniendo el underflow numérico (max(Scr/κ, 1) ** -1.2)
+        # descubierto por Hypothesis.
+        pytest.param(350.0, 50, "F", id="creatinina demasiado alta"),
         pytest.param(1, -5, "M", id="edad negativa"),
+        # Hallazgo de Hypothesis: edad=119810 daba eGFR 0.0 (underflow).
+        pytest.param(1, 119810.0, "M", id="edad imposible"),
         pytest.param(1, 30, "f", id="sexo invalido"),
     ],
 )

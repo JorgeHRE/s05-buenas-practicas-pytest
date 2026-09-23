@@ -28,6 +28,8 @@ dev = [
     "mypy",
     "pre-commit",
     "pandas-stubs",
+    # Bono: pruebas basadas en propiedades (tests/test_propiedades_egfr.py).
+    "hypothesis",
 ]
 # [notebook]: solo para abrir y ejecutar notebooks/analisis_pacientes.ipynb.
 # Va aparte de [dev] para que los tests (y el CI) no instalen Jupyter.
